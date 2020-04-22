@@ -3963,6 +3963,24 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
       ::icnt_push(m_cluster_id, m_config->mem2device(destination), (void*)mf, mf->get_ctrl_size() );
    else 
       ::icnt_push(m_cluster_id, m_config->mem2device(destination), (void*)mf, mf->size());
+
+   printf("%3d, ", mf->get_tpc());	// cluster ID
+   printf("%3d, ", mf->get_sid());	// SM global ID
+   unsigned core_local_id = mf->get_sid() % m_config->n_simt_cores_per_cluster; // SM local ID within a cluster
+   printf("%3d, ", core_local_id);	// SM local ID
+   shader_core_ctx *core = m_core[core_local_id];
+   printf("%3d, ", mf->get_wid());	// WARP ID
+   unsigned thread_id = mf->get_wid() * m_config->warp_size + 0;	// ID of the first thread within a WARP
+   thread_ctx_t threadState = core->m_threadState[thread_id];
+   unsigned cta_id = threadState.m_cta_id;	// ThreadBlock ID
+   printf("%3d, ", cta_id);		// ThreadBlock(CTA) ID
+   unsigned n_insn_ac = threadState.n_insn_ac;
+   printf("%3d, ", n_insn_ac);		// Instructions executed
+   unsigned n_completed = core->m_warp[mf->get_wid()].n_completed;
+   printf("%3d, ", n_completed);		// Instructions executed
+   printf("0x%8llx, ", mf->get_addr());
+   printf("%10lld", gpu_sim_cycle);
+   printf("\n");
 }
 
 void simt_core_cluster::icnt_cycle()
