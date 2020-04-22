@@ -1999,7 +1999,9 @@ public:
     std::bitset<MAX_THREAD_PER_SM> m_active_threads;
     
     // thread contexts 
+public:
     thread_ctx_t             *m_threadState;
+private:
     
     // interconnect interface
     mem_fetch_interface *m_icnt;
