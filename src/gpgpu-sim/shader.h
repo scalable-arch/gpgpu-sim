@@ -253,7 +253,9 @@ private:
     unsigned m_dynamic_warp_id;
 
     address_type m_next_pc;
+public:
     unsigned n_completed;          // number of threads in warp completed
+private:
     std::bitset<MAX_WARP_SIZE> m_active_threads;
 
     bool m_imiss_pending;
@@ -2012,7 +2014,9 @@ private:
     int  m_last_warp_fetched;
 
     // decode/dispatch
+public:
     std::vector<shd_warp_t>   m_warp;   // per warp information array
+private:
     barrier_set_t             m_barriers;
     ifetch_buffer_t           m_inst_fetch_buffer;
     std::vector<register_set> m_pipeline_reg;
